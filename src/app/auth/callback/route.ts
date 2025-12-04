@@ -20,9 +20,17 @@ export async function GET(request: Request) {
                     },
                     setAll(cookiesToSet) {
                         try {
-                            cookiesToSet.forEach(({ name, value, options }) =>
-                                cookieStore.set(name, value, options)
-                            )
+                            cookiesToSet.forEach(({ name, value, options }) => {
+                                // Enhanced cookie security
+                                const enhancedOptions = {
+                                    ...options,
+                                    sameSite: 'lax' as const,
+                                    secure: process.env.NODE_ENV === 'production',
+                                    path: '/',
+                                    httpOnly: true,
+                                }
+                                cookieStore.set(name, value, enhancedOptions)
+                            })
                         } catch {
                             // The `setAll` method was called from a Server Component.
                             // This can be ignored if you have middleware refreshing
@@ -32,20 +40,20 @@ export async function GET(request: Request) {
                 },
             }
         )
+
         const { error } = await supabase.auth.exchangeCodeForSession(code)
         if (!error) {
-            // Check if role is passed in params (from Google OAuth)
-            // Note: Google doesn't pass custom params back directly in the URL usually, 
-            // but Supabase might preserve it if configured or we might need to check user metadata.
-            // However, a more robust way for OAuth is to check if the user is new and update metadata.
+            // Get the authenticated user
+            const { data: { user }, error: userError } = await supabase.auth.getUser()
 
-            // Actually, for OAuth, the 'role' param sent to provider isn't always returned to callback.
-            // But we can try to update the user if we have the session.
+            if (userError || !user) {
+                console.error('Failed to get user after OAuth:', userError)
+                return NextResponse.redirect(`${origin}/auth/auth-code-error`)
+            }
 
-            // Better approach: Redirect to a role-check page or dashboard which handles routing.
-            // But let's try to see if we can determine where to go.
+            // Log the authenticated user for debugging
+            console.log('OAuth authenticated user:', user.id, user.email)
 
-            const { data: { user } } = await supabase.auth.getUser()
             const role = user?.user_metadata?.role || 'tenant'
 
             if (role === 'landlord') {
@@ -53,6 +61,8 @@ export async function GET(request: Request) {
             } else {
                 return NextResponse.redirect(`${origin}/tenant`)
             }
+        } else {
+            console.error('OAuth error:', error)
         }
     }
 

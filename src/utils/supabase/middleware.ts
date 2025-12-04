@@ -17,8 +17,16 @@ export const updateSession = async (request: NextRequest) => {
                 },
                 setAll(cookiesToSet) {
                     cookiesToSet.forEach(({ name, value, options }) => {
+                        // Enhanced cookie security settings
+                        const enhancedOptions = {
+                            ...options,
+                            sameSite: 'lax' as const,
+                            secure: process.env.NODE_ENV === 'production',
+                            path: '/',
+                            httpOnly: true,
+                        }
                         request.cookies.set(name, value)
-                        supabaseResponse.cookies.set(name, value, options)
+                        supabaseResponse.cookies.set(name, value, enhancedOptions)
                     })
                 },
             },
@@ -46,6 +54,9 @@ export const updateSession = async (request: NextRequest) => {
     if (!user && isProtectedRoute) {
         const url = request.nextUrl.clone()
         url.pathname = '/auth'
+        // Clear any stale auth cookies
+        supabaseResponse.cookies.delete('sb-access-token')
+        supabaseResponse.cookies.delete('sb-refresh-token')
         return NextResponse.redirect(url)
     }
 
