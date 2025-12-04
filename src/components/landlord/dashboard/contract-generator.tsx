@@ -128,6 +128,7 @@ Signature de la caution
     const supabase = createClient()
 
     // Load template from localStorage
+    // Force rebuild
     useEffect(() => {
         const saved = localStorage.getItem('landlord_contract_template')
         if (saved) setCustomTemplateText(saved)
