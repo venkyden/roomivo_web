@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { FileText } from "lucide-react"
 import jsPDF from "jspdf"
 import { createClient } from "@/utils/supabase/client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { toast } from "sonner"
 import {
     Select,
