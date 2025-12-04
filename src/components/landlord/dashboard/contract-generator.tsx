@@ -618,9 +618,9 @@ Signature de la caution
                                     Customize your contract. Changes are auto-saved.
                                 </p>
                                 <div className="flex gap-2">
-                                    <Button size="xs" variant="ghost" onClick={() => loadPreset('simple')} className="text-xs">Load Simple</Button>
-                                    <Button size="xs" variant="ghost" onClick={() => loadPreset('detailed')} className="text-xs">Load Detailed</Button>
-                                    <Button size="xs" variant="ghost" onClick={() => loadPreset('guarantor_custom')} className="text-xs text-violet-600">Load Guarantor Act</Button>
+                                    <Button size="sm" variant="ghost" onClick={() => loadPreset('simple')} className="text-xs">Load Simple</Button>
+                                    <Button size="sm" variant="ghost" onClick={() => loadPreset('detailed')} className="text-xs">Load Detailed</Button>
+                                    <Button size="sm" variant="ghost" onClick={() => loadPreset('guarantor_custom')} className="text-xs text-violet-600">Load Guarantor Act</Button>
                                 </div>
                             </div>
                             <div className="flex gap-2 mb-2 flex-wrap">
