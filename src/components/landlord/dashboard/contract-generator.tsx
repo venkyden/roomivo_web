@@ -624,15 +624,15 @@ Signature de la caution
                                 </div>
                             </div>
                             <div className="flex gap-2 mb-2 flex-wrap">
-                                <Button size="xs" variant="outline" onClick={() => insertVariable('{{TENANT_NAME}}')}>Tenant</Button>
-                                <Button size="xs" variant="outline" onClick={() => insertVariable('{{LANDLORD_NAME}}')}>Landlord</Button>
-                                <Button size="xs" variant="outline" onClick={() => insertVariable('{{PROPERTY_ADDRESS}}')}>Address</Button>
-                                <Button size="xs" variant="outline" onClick={() => insertVariable('{{RENT}}')}>Rent</Button>
-                                <Button size="xs" variant="outline" onClick={() => insertVariable('{{CHARGES}}')}>Charges</Button>
-                                <Button size="xs" variant="outline" onClick={() => insertVariable('{{DEPOSIT}}')}>Deposit</Button>
-                                <Button size="xs" variant="outline" onClick={() => insertVariable('{{START_DATE}}')}>Date</Button>
-                                <Button size="xs" variant="outline" onClick={() => insertVariable('{{SURFACE}}')}>Surface</Button>
-                                <Button size="xs" variant="outline" onClick={() => insertVariable('{{AMENITIES}}')}>Amenities</Button>
+                                <Button size="sm" variant="outline" onClick={() => insertVariable('{{TENANT_NAME}}')}>Tenant</Button>
+                                <Button size="sm" variant="outline" onClick={() => insertVariable('{{LANDLORD_NAME}}')}>Landlord</Button>
+                                <Button size="sm" variant="outline" onClick={() => insertVariable('{{PROPERTY_ADDRESS}}')}>Address</Button>
+                                <Button size="sm" variant="outline" onClick={() => insertVariable('{{RENT}}')}>Rent</Button>
+                                <Button size="sm" variant="outline" onClick={() => insertVariable('{{CHARGES}}')}>Charges</Button>
+                                <Button size="sm" variant="outline" onClick={() => insertVariable('{{DEPOSIT}}')}>Deposit</Button>
+                                <Button size="sm" variant="outline" onClick={() => insertVariable('{{START_DATE}}')}>Date</Button>
+                                <Button size="sm" variant="outline" onClick={() => insertVariable('{{SURFACE}}')}>Surface</Button>
+                                <Button size="sm" variant="outline" onClick={() => insertVariable('{{AMENITIES}}')}>Amenities</Button>
                             </div>
                             <textarea
                                 className="w-full h-96 p-2 text-sm border rounded font-mono"
