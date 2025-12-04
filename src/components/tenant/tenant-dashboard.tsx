@@ -14,8 +14,10 @@ import { IncidentList } from '@/components/incidents/incident-list'
 import { TenantContracts } from "./dashboard/tenant-contracts"
 import { TenantDocuments } from "./dashboard/tenant-documents"
 import { ProfileForm } from "@/components/profile/profile-form"
+import { Button } from "@/components/ui/button"
 import { createClient } from "@/utils/supabase/client"
 import { useEffect } from "react"
+import { toast } from "sonner"
 
 export function TenantDashboard() {
     const router = useRouter()
