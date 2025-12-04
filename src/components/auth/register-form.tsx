@@ -11,11 +11,15 @@ import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const formSchema = z.object({
+    firstName: z.string().min(2, { message: "First name is required" }),
+    lastName: z.string().min(2, { message: "Last name is required" }),
     email: z.string().email({ message: "Invalid email address" }),
     password: z.string().min(6, { message: "Password must be at least 6 characters" }),
     confirmPassword: z.string(),
+    role: z.enum(["tenant", "landlord"]),
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirmPassword"],
@@ -29,9 +33,12 @@ export function RegisterForm() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
+            firstName: "",
+            lastName: "",
             email: "",
             password: "",
             confirmPassword: "",
+            role: "tenant",
         },
     })
 
@@ -43,6 +50,11 @@ export function RegisterForm() {
                 password: values.password,
                 options: {
                     emailRedirectTo: `${location.origin}/auth/callback`,
+                    data: {
+                        first_name: values.firstName,
+                        last_name: values.lastName,
+                        role: values.role,
+                    }
                 },
             })
 
@@ -51,7 +63,12 @@ export function RegisterForm() {
                 return
             }
 
-            toast.success("Account created! Please check your email.")
+            toast.success("Account created! Redirecting...")
+            if (values.role === 'landlord') {
+                router.push('/landlord')
+            } else {
+                router.push('/tenant')
+            }
         } catch (error) {
             toast.error("Something went wrong")
         } finally {
@@ -62,6 +79,34 @@ export function RegisterForm() {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                        control={form.control}
+                        name="firstName"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>First Name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="John" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="lastName"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Last Name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Doe" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
                 <FormField
                     control={form.control}
                     name="email"
@@ -101,6 +146,25 @@ export function RegisterForm() {
                         </FormItem>
                     )}
                 />
+
+                <FormField
+                    control={form.control}
+                    name="role"
+                    render={({ field }) => (
+                        <FormItem className="space-y-3">
+                            <FormLabel>I am a...</FormLabel>
+                            <FormControl>
+                                <Tabs defaultValue="tenant" value={field.value} onValueChange={field.onChange} className="w-full">
+                                    <TabsList className="grid w-full grid-cols-2">
+                                        <TabsTrigger value="tenant">Tenant</TabsTrigger>
+                                        <TabsTrigger value="landlord">Landlord</TabsTrigger>
+                                    </TabsList>
+                                </Tabs>
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                     Create Account
@@ -121,6 +185,11 @@ export function RegisterForm() {
                         provider: 'google',
                         options: {
                             redirectTo: `${location.origin}/auth/callback`,
+                            queryParams: {
+                                access_type: 'offline',
+                                prompt: 'consent',
+                                role: form.getValues('role') // Pass selected role
+                            },
                         },
                     })
                 }}>

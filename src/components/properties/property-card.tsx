@@ -1,10 +1,12 @@
 'use client'
 
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Property } from "@/types"
 import { MapPin, BedDouble, Star, ArrowRight } from "lucide-react"
+import Link from "next/link"
 import Image from "next/image"
 
 interface PropertyCardProps {
@@ -13,14 +15,17 @@ interface PropertyCardProps {
 }
 
 export function PropertyCard({ property, onSelect }: PropertyCardProps) {
+    const [imgSrc, setImgSrc] = useState(property.images[0] || "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80")
+
     return (
         <Card className="group overflow-hidden border-border/50 hover:shadow-lg transition-all duration-300">
             <div className="relative h-48 w-full overflow-hidden">
                 <Image
-                    src={property.images[0] || "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80"}
+                    src={imgSrc}
                     alt={property.name}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    onError={() => setImgSrc("https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80")}
                 />
                 <div className="absolute top-3 right-3">
                     <Badge className="bg-background/80 backdrop-blur-sm text-foreground hover:bg-background/90">
@@ -76,12 +81,11 @@ export function PropertyCard({ property, onSelect }: PropertyCardProps) {
             </CardContent>
 
             <CardFooter className="p-4 pt-0">
-                <Button
-                    className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
-                    onClick={() => onSelect?.(property)}
-                >
-                    View Details <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
+                <Link href={`/properties/${property.id}`} className="w-full">
+                    <Button className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                        View Details <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                </Link>
             </CardFooter>
         </Card>
     )

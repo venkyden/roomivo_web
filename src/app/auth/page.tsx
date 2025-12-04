@@ -1,13 +1,21 @@
 'use client'
 
-import { useState } from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { LoginForm } from '@/components/auth/login-form'
 import { RegisterForm } from '@/components/auth/register-form'
 import { Building2 } from 'lucide-react'
 
 export default function AuthPage() {
+    const [mode, setMode] = useState<'login' | 'register'>('login')
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    if (!mounted) return null
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
             <div className="w-full max-w-md space-y-8">
@@ -25,18 +33,30 @@ export default function AuthPage() {
                         <CardDescription>Sign in to your account or create a new one.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Tabs defaultValue="login" className="w-full">
-                            <TabsList className="grid w-full grid-cols-2 mb-6">
-                                <TabsTrigger value="login">Login</TabsTrigger>
-                                <TabsTrigger value="register">Register</TabsTrigger>
-                            </TabsList>
-                            <TabsContent value="login">
-                                <LoginForm />
-                            </TabsContent>
-                            <TabsContent value="register">
-                                <RegisterForm />
-                            </TabsContent>
-                        </Tabs>
+                        <div className="grid w-full grid-cols-2 mb-6 bg-muted p-1 rounded-lg">
+                            <button
+                                onClick={() => setMode('login')}
+                                className={`text-sm font-medium py-2 rounded-md transition-all ${mode === 'login'
+                                    ? 'bg-background text-foreground shadow-sm'
+                                    : 'text-muted-foreground hover:text-foreground'
+                                    }`}
+                            >
+                                Login
+                            </button>
+                            <button
+                                onClick={() => setMode('register')}
+                                className={`text-sm font-medium py-2 rounded-md transition-all ${mode === 'register'
+                                    ? 'bg-background text-foreground shadow-sm'
+                                    : 'text-muted-foreground hover:text-foreground'
+                                    }`}
+                            >
+                                Register
+                            </button>
+                        </div>
+
+                        <div className="mt-4">
+                            {mode === 'login' ? <LoginForm /> : <RegisterForm />}
+                        </div>
                     </CardContent>
                 </Card>
             </div>

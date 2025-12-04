@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Check, X, FileText, ShieldCheck } from "lucide-react"
 import { toast } from "sonner"
 import { useLandlordApplications } from "@/hooks/use-landlord-applications"
+import { ContractGenerator } from "./contract-generator"
 
 export function ApplicantViewer() {
     const { applicants, loading, updateStatus } = useLandlordApplications()
@@ -76,9 +77,23 @@ export function ApplicantViewer() {
                                     </>
                                 )}
                                 {applicant.status !== 'pending' && (
-                                    <Badge variant={applicant.status === 'approved' ? 'default' : 'destructive'}>
-                                        {applicant.status.charAt(0).toUpperCase() + applicant.status.slice(1)}
-                                    </Badge>
+                                    <div className="flex items-center gap-2">
+                                        <Badge variant={applicant.status === 'approved' ? 'default' : 'destructive'}>
+                                            {applicant.status.charAt(0).toUpperCase() + applicant.status.slice(1)}
+                                        </Badge>
+                                        {applicant.status === 'approved' && (
+                                            <ContractGenerator
+                                                tenantName={applicant.name}
+                                                propertyName={applicant.property}
+                                                price={applicant.income * 0.3} // Estimate rent as 30% of income for now, or fetch real rent
+                                                currency="€"
+                                                startDate={new Date().toLocaleDateString()}
+                                                applicationId={applicant.id}
+                                                tenantId={applicant.tenant_id}
+                                                propertyId={applicant.property_id}
+                                            />
+                                        )}
+                                    </div>
                                 )}
                             </div>
                         </div>

@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react';
-import { useChat, Message } from '@/hooks/use-chat';
+import { useChat } from '@/hooks/use-chat';
+import { Message } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';

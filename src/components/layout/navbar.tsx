@@ -34,8 +34,24 @@ export function Navbar() {
 
         // Check auth status
         const getUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser()
-            setUser(user)
+            try {
+                const { data: { user } } = await supabase.auth.getUser()
+                if (user) {
+                    const { data: profile, error } = await supabase
+                        .from('profiles')
+                        .select('*')
+                        .eq('id', user.id)
+                        .single()
+
+                    if (!error && profile) {
+                        setUser({ ...user, profile })
+                    } else {
+                        setUser(user)
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching user:", error)
+            }
         }
         getUser()
 
@@ -97,15 +113,17 @@ export function Navbar() {
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                                     <Avatar className="h-10 w-10 border border-border">
-                                        <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`} alt={user.email} />
-                                        <AvatarFallback>U</AvatarFallback>
+                                        <AvatarImage src={user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`} alt={user.email} />
+                                        <AvatarFallback>{user.profile?.first_name?.[0] || 'U'}</AvatarFallback>
                                     </Avatar>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-56" align="end" forceMount>
                                 <DropdownMenuLabel className="font-normal">
                                     <div className="flex flex-col space-y-1">
-                                        <p className="text-sm font-medium leading-none">User</p>
+                                        <p className="text-sm font-medium leading-none">
+                                            {user.profile?.first_name} {user.profile?.last_name}
+                                        </p>
                                         <p className="text-xs leading-none text-muted-foreground">
                                             {user.email}
                                         </p>

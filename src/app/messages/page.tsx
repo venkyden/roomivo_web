@@ -1,14 +1,19 @@
-import { Navbar } from "@/components/layout/navbar"
 import { ChatLayout } from "@/components/messages/chat-layout"
+import { createClient } from "@/utils/supabase/server"
+import { redirect } from "next/navigation"
 
-export default function MessagesPage() {
+export default async function MessagesPage() {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        redirect('/auth')
+    }
+
     return (
-        <div className="min-h-screen bg-background flex flex-col">
-            <Navbar />
-            <main className="flex-1 container mx-auto px-4 py-8">
-                <h1 className="text-2xl font-bold mb-6">Messages</h1>
-                <ChatLayout />
-            </main>
+        <div className="container mx-auto py-6">
+            <h1 className="text-3xl font-bold tracking-tight mb-6">Messages</h1>
+            <ChatLayout />
         </div>
     )
 }

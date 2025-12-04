@@ -29,8 +29,8 @@ export function TenantApplicationCard({ application, onViewDetails }: TenantAppl
         <Card className="p-6 border-border/50 hover:shadow-md transition-all duration-300">
             <div className="flex justify-between items-start mb-4">
                 <div>
-                    <h3 className="font-bold text-lg">{application.property.name}</h3>
-                    <p className="text-sm text-muted-foreground">{application.property.location}</p>
+                    <h3 className="font-bold text-lg">{application.property?.name || 'Unknown Property'}</h3>
+                    <p className="text-sm text-muted-foreground">{application.property?.location || 'Unknown Location'}</p>
                 </div>
                 {getStatusBadge(application.status)}
             </div>

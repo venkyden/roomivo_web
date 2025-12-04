@@ -39,7 +39,70 @@ export interface Application {
     property_id: string;
     tenant_id: string;
     status: 'pending' | 'approved' | 'rejected' | 'draft';
+    message?: string;
+    created_at: string;
+    tenant?: TenantProfile;
+    property?: Property;
+}
+
+export interface Payment {
+    id: string;
+    tenant_id: string;
+    landlord_id: string;
+    property_id: string;
+    amount: number;
+    currency: string;
+    status: 'paid' | 'pending' | 'overdue' | 'failed';
+    payment_date?: string;
+    due_date: string;
+    invoice_url?: string;
+    description?: string;
+    created_at: string;
+    property?: Property;
+    tenant?: TenantProfile;
+}
+
+export interface Incident {
+    id: string;
+    title: string;
+    description: string;
+    priority: 'low' | 'medium' | 'high' | 'critical';
+    status: 'reported' | 'in_progress' | 'resolved' | 'closed';
+    photos?: string[];
+    tenant_id: string;
+    property_id: string;
     created_at: string;
     updated_at: string;
-    property: Property;
+    property?: Property;
+    tenant?: TenantProfile;
+}
+
+export interface Message {
+    id: string;
+    content: string;
+    sender_id: string;
+    created_at: string;
+    conversation_id: string;
+    is_read?: boolean;
+}
+
+export interface Conversation {
+    id: string;
+    participant_id: string;
+    participant_name: string;
+    participant_avatar?: string;
+    last_message?: string;
+    last_message_at?: string;
+    unread_count: number;
+}
+
+export interface Document {
+    id: string;
+    user_id: string;
+    property_id?: string;
+    type: string;
+    name: string;
+    file_url: string;
+    status: 'pending' | 'verified' | 'rejected';
+    created_at: string;
 }

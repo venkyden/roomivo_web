@@ -11,6 +11,7 @@ import { createClient } from '@/utils/supabase/client'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
+import { ForgotPasswordDialog } from './forgot-password-dialog'
 
 const formSchema = z.object({
     email: z.string().email({ message: "Invalid email address" }),
@@ -82,6 +83,9 @@ export function LoginForm() {
                         </FormItem>
                     )}
                 />
+                <div className="flex justify-end">
+                    <ForgotPasswordDialog />
+                </div>
                 <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                     Sign In

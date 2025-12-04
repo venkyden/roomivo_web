@@ -1,8 +1,9 @@
+
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export async function updateSession(request: NextRequest) {
-    let supabaseResponse = NextResponse.next({
+export const updateSession = async (request: NextRequest) => {
+    const supabaseResponse = NextResponse.next({
         request,
     })
 
@@ -32,17 +33,26 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
-    if (
-        !user &&
-        !request.nextUrl.pathname.startsWith('/auth') &&
-        !request.nextUrl.pathname.startsWith('/') &&
-        !request.nextUrl.pathname.startsWith('/_next') &&
-        !request.nextUrl.pathname.startsWith('/api') &&
-        !request.nextUrl.pathname.startsWith('/static')
-    ) {
-        // no user, potentially respond by redirecting the user to the login page
+    const path = request.nextUrl.pathname
+
+    // Protected routes
+    const isProtectedRoute =
+        path.startsWith('/dashboard') ||
+        path.startsWith('/tenant') ||
+        path.startsWith('/landlord') ||
+        path.startsWith('/profile') ||
+        path.startsWith('/messages')
+
+    if (!user && isProtectedRoute) {
         const url = request.nextUrl.clone()
         url.pathname = '/auth'
+        return NextResponse.redirect(url)
+    }
+
+    // Redirect authenticated users away from auth page
+    if (user && path.startsWith('/auth') && !path.startsWith('/auth/update-password')) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/dashboard'
         return NextResponse.redirect(url)
     }
 
