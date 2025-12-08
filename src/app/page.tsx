@@ -39,17 +39,17 @@ export default async function Home() {
 
           <div className="container mx-auto px-4 text-center">
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
               Rent with <span className="text-primary">Confidence</span>.<br />
               Live with <span className="text-primary">Peace of Mind</span>.
             </h1>
 
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-in fade-in slide-in-from-bottom-12 duration-1000">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
               The first rental platform that protects both tenants and landlords.
               Verified profiles, secure payments, and legal compliance built-in.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-16 duration-1000">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" className="h-12 px-8 text-lg rounded-full shadow-lg shadow-primary/25" asChild>
                 <Link href="/auth">
                   Start Renting <ArrowRight className="ml-2 w-5 h-5" />
@@ -58,6 +58,10 @@ export default async function Home() {
               <Button size="lg" variant="outline" className="h-12 px-8 text-lg rounded-full bg-background/50 backdrop-blur-sm" asChild>
                 <Link href="/about">How it Works</Link>
               </Button>
+            </div>
+            {/* Debug Info */}
+            <div className="mt-8 text-xs text-muted-foreground opacity-50">
+              Server Status: {userWithProfile ? `Logged In (${userWithProfile.email})` : 'Not Logged In'}
             </div>
           </div>
         </section>
