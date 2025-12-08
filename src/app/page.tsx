@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { ArrowRight, ShieldCheck, Clock, FileCheck } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
   let userWithProfile: any = null
 
