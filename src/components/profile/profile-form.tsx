@@ -50,30 +50,45 @@ export function ProfileForm({ user }: { user: any }) {
 
     useEffect(() => {
         const fetchProfile = async () => {
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', user.id)
-                .single()
+            if (!user?.id) return
 
-            if (data) {
-                form.reset({
-                    first_name: data.first_name || "",
-                    last_name: data.last_name || "",
-                    phone: data.phone || "",
-                    profession: data.profession || "",
-                    income: data.income?.toString() || "",
-                    age: data.age?.toString() || "",
-                    bio: data.bio || "",
-                    has_guarantor: data.has_guarantor || false,
-                    preferred_location: data.preferred_location || "",
-                    budget_min: data.budget_min?.toString() || "",
-                    budget_max: data.budget_max?.toString() || "",
-                })
+            setIsLoading(true)
+            try {
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single()
+
+                if (error) {
+                    console.error("Error fetching profile:", error)
+                    // Don't toast here as it might be effective "not found" which is fine for new users
+                }
+
+                if (data) {
+                    console.log("Profile data loaded:", data)
+                    form.reset({
+                        first_name: data.first_name || "",
+                        last_name: data.last_name || "",
+                        phone: data.phone || "",
+                        profession: data.profession || "",
+                        income: data.income?.toString() || "",
+                        age: data.age?.toString() || "",
+                        bio: data.bio || "",
+                        has_guarantor: data.has_guarantor || false,
+                        preferred_location: data.preferred_location || "",
+                        budget_min: data.budget_min?.toString() || "",
+                        budget_max: data.budget_max?.toString() || "",
+                    })
+                }
+            } catch (err) {
+                console.error("Unexpected error loading profile:", err)
+            } finally {
+                setIsLoading(false)
             }
         }
         fetchProfile()
-    }, [user.id, form, supabase])
+    }, [user.id, supabase, form])
 
     async function onSubmit(values: z.infer<typeof profileSchema>) {
         setIsLoading(true)
