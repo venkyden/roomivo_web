@@ -35,18 +35,6 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <div className="min-h-screen flex flex-col">
-          {/* Pass server-fetched user to Navbar */}
-          {/* Note: In sub-pages that use Navbar independently, they should also pass it, but Navbar is global usually */}
-          {/* Wait, Navbar is used inside specific pages in current codebase structure, e.g. LandlordPage uses <Navbar /> manually. */}
-          {/* Checking usage: LandlordPage uses <Navbar />. HomePage uses <Navbar />. */}
-          {/* If I add it here in Layout, I might double-render it if pages also include it. */}
-          {/* Let's checks the codebase. The user provided `app/landlord/page.tsx` has <Navbar />. */}
-          {/* `app/page.tsx` has <Navbar />. */}
-          {/* So `RootLayout` does NOT have <Navbar /> currently. */}
-          {/* So I should NOT add it to RootLayout unless I refactor the whole app to use a Layout-based Navbar. */}
-          {/* It's safer to update the specific pages to pass the user to Navbar. */}
-        </div>
         {children}
         <Toaster />
       </body>
