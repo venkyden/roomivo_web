@@ -1,5 +1,7 @@
 'use client'
 
+import { toast } from "sonner"
+
 import { useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SmartInsights } from "./dashboard/smart-insights"
@@ -27,7 +29,7 @@ export function LandlordDashboard() {
     }, [])
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-8 pt-24">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
@@ -35,11 +37,11 @@ export function LandlordDashboard() {
                     <p className="text-muted-foreground">Manage your portfolio with AI-driven insights</p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <Button variant="outline" size="icon" className="relative">
+                    <Button variant="outline" size="icon" className="relative" onClick={() => toast.info("No new notifications")}>
                         <Bell className="w-5 h-5" />
                         <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center bg-destructive text-[10px]">3</Badge>
                     </Button>
-                    <Button variant="outline" size="icon">
+                    <Button variant="outline" size="icon" onClick={() => setActiveTab("profile")}>
                         <Settings className="w-5 h-5" />
                     </Button>
                 </div>
