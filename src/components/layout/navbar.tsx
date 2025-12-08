@@ -18,11 +18,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-export function Navbar() {
+export function Navbar({ initialUser }: { initialUser?: any }) {
     const pathname = usePathname()
     const [isScrolled, setIsScrolled] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-    const [user, setUser] = useState<any>(null)
+    const [user, setUser] = useState<any>(initialUser || null)
     const router = useRouter()
     const supabase = createClient()
 
@@ -34,6 +34,8 @@ export function Navbar() {
 
         // Initial check
         const getUser = async () => {
+            if (initialUser) return // Skip if provided by server
+
             try {
                 const { data: { user }, error } = await supabase.auth.getUser()
                 if (user) {

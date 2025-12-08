@@ -3,11 +3,25 @@ import { Footer } from '@/components/layout/footer'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { ArrowRight, ShieldCheck, Clock, FileCheck } from 'lucide-react'
+import { createClient } from '@/utils/supabase/server'
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  let userWithProfile = user
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single()
+    if (profile) userWithProfile = { ...user, profile }
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <Navbar initialUser={userWithProfile} />
 
       <main className="flex-1">
         {/* Hero Section */}

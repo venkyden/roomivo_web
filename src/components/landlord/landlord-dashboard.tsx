@@ -15,18 +15,20 @@ import { ProfileForm } from "@/components/profile/profile-form"
 import { createClient } from "@/utils/supabase/client"
 import { useEffect } from "react"
 
-export function LandlordDashboard() {
+export function LandlordDashboard({ initialUser }: { initialUser?: any }) {
     const [activeTab, setActiveTab] = useState("overview")
-    const [user, setUser] = useState<any>(null)
+    const [user, setUser] = useState<any>(initialUser || null)
     const supabase = createClient()
 
     useEffect(() => {
+        if (initialUser) return // Skip if already loaded from server
+
         const getUser = async () => {
             const { data: { user } } = await supabase.auth.getUser()
             setUser(user)
         }
         getUser()
-    }, [])
+    }, [initialUser])
 
     return (
         <div className="space-y-8 pt-24">
