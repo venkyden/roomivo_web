@@ -5,24 +5,15 @@ import { Plus, Home, MapPin, Euro } from "lucide-react"
 import { toast } from "sonner"
 import { useLandlordProperties } from "@/hooks/use-landlord-properties"
 import Image from "next/image"
-import { AddPropertyDialog } from "./add-property-dialog"
-import { BulkUploadDialog } from "./bulk-upload-dialog"
-import { Upload } from "lucide-react"
-
 export function PropertyManager() {
     const { properties, loading, addProperty } = useLandlordProperties()
     const [isAddOpen, setIsAddOpen] = useState(false)
-    const [isBulkOpen, setIsBulkOpen] = useState(false)
 
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold tracking-tight">My Properties</h2>
                 <div className="flex gap-2">
-                    <Button onClick={() => setIsBulkOpen(true)} variant="outline" size="sm">
-                        <Upload className="w-4 h-4 mr-2" />
-                        Bulk Upload
-                    </Button>
                     <Button onClick={() => setIsAddOpen(true)} size="sm">
                         <Plus className="w-4 h-4 mr-2" />
                         Add Property
@@ -82,7 +73,7 @@ export function PropertyManager() {
             </div>
 
             <AddPropertyDialog open={isAddOpen} onOpenChange={setIsAddOpen} />
-            <BulkUploadDialog open={isBulkOpen} onOpenChange={setIsBulkOpen} />
+
         </div>
     )
 }
