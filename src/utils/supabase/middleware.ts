@@ -51,6 +51,24 @@ export const updateSession = async (request: NextRequest) => {
         path.startsWith('/profile') ||
         path.startsWith('/messages')
 
+    // SELF-HEALING: Force remove httpOnly from existing auth cookies
+    // This fixes the issue for users who have "invisible" cookies from previous strict settings
+    const allCookies = request.cookies.getAll()
+    allCookies.forEach(cookie => {
+        if (cookie.name.startsWith('sb-') && cookie.name.endsWith('-auth-token')) {
+            // Re-set the cookie on the response with httpOnly: false
+            supabaseResponse.cookies.set({
+                name: cookie.name,
+                value: cookie.value,
+                domain: cookie.domain,
+                path: '/',
+                sameSite: 'lax',
+                secure: process.env.NODE_ENV === 'production',
+                httpOnly: false, // Critical fix
+            })
+        }
+    })
+
     if (!user && isProtectedRoute) {
         const url = request.nextUrl.clone()
         url.pathname = '/auth'
