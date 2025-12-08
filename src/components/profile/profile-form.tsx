@@ -66,7 +66,7 @@ export function ProfileForm({ user }: { user: any }) {
                 }
 
                 if (data) {
-                    console.log("Profile data loaded:", data)
+
                     form.reset({
                         first_name: data.first_name || "",
                         last_name: data.last_name || "",

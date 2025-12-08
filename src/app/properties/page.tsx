@@ -15,8 +15,7 @@ export default function PropertiesPage() {
 
             {/* Reuse the matches list component which fetches properties */}
             <TenantMatches onSelectProperty={(property) => {
-                // For now, just log or maybe navigate to detail if we had a detail page
-                console.log("Selected property", property)
+                router.push(`/properties/${property.id}`)
             }} />
         </div>
     )

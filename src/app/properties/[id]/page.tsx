@@ -12,6 +12,7 @@ import Image from "next/image"
 import { useParams } from "next/navigation"
 import { Loader2 } from "lucide-react"
 import { ApplyDialog } from "@/components/properties/apply-dialog"
+import { toast } from "sonner"
 
 export default function PropertyDetailsPage() {
     const params = useParams()
@@ -102,10 +103,23 @@ export default function PropertyDetailsPage() {
                             priority
                         />
                         <div className="absolute top-4 right-4 flex gap-2">
-                            <Button variant="secondary" size="icon" className="rounded-full backdrop-blur-md bg-background/80">
+                            <Button
+                                variant="secondary"
+                                size="icon"
+                                className="rounded-full backdrop-blur-md bg-background/80"
+                                onClick={() => {
+                                    navigator.clipboard.writeText(window.location.href)
+                                    toast.success("Link copied to clipboard")
+                                }}
+                            >
                                 <Share2 className="w-4 h-4" />
                             </Button>
-                            <Button variant="secondary" size="icon" className="rounded-full backdrop-blur-md bg-background/80">
+                            <Button
+                                variant="secondary"
+                                size="icon"
+                                className="rounded-full backdrop-blur-md bg-background/80"
+                                onClick={() => toast.success("Saved to favorites")}
+                            >
                                 <Heart className="w-4 h-4" />
                             </Button>
                         </div>
@@ -206,7 +220,11 @@ export default function PropertyDetailsPage() {
                                 >
                                     Apply Now
                                 </Button>
-                                <Button variant="outline" className="w-full h-12 text-lg font-medium">
+                                <Button
+                                    variant="outline"
+                                    className="w-full h-12 text-lg font-medium"
+                                    onClick={() => toast.info("Messaging coming soon")}
+                                >
                                     Contact Landlord
                                 </Button>
                             </div>
