@@ -60,7 +60,6 @@ export const updateSession = async (request: NextRequest) => {
             supabaseResponse.cookies.set({
                 name: cookie.name,
                 value: cookie.value,
-                domain: cookie.domain,
                 path: '/',
                 sameSite: 'lax',
                 secure: process.env.NODE_ENV === 'production',
