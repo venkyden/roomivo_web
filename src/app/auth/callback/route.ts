@@ -51,10 +51,30 @@ export async function GET(request: Request) {
                 return NextResponse.redirect(`${origin}/auth/auth-code-error`)
             }
 
-            // Log the authenticated user for debugging
-            console.log('OAuth authenticated user:', user.id, user.email)
+            // Handle Registration Flow - Update Role
+            const flow = searchParams.get('flow')
+            const requestedRole = searchParams.get('role')
 
-            const role = user?.user_metadata?.role || 'tenant'
+            if (flow === 'register' && requestedRole && ['tenant', 'landlord'].includes(requestedRole)) {
+                // Update user metadata
+                await supabase.auth.updateUser({
+                    data: { role: requestedRole }
+                })
+
+                // Update profile
+                await supabase
+                    .from('profiles')
+                    .update({ role: requestedRole })
+                    .eq('id', user.id)
+            }
+
+            // Get final role (either from update above or existing)
+            // Refresh user data to get latest metadata
+            const { data: { user: refreshedUser } } = await supabase.auth.getUser()
+            const role = refreshedUser?.user_metadata?.role || 'tenant'
+
+            // Log for debugging
+            console.log('OAuth user:', user.id, 'Flow:', flow, 'Role:', role)
 
             if (role === 'landlord') {
                 return NextResponse.redirect(`${origin}/landlord`)

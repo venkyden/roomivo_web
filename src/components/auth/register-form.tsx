@@ -184,11 +184,10 @@ export function RegisterForm() {
                     supabase.auth.signInWithOAuth({
                         provider: 'google',
                         options: {
-                            redirectTo: `${location.origin}/auth/callback`,
+                            redirectTo: `${location.origin}/auth/callback?flow=register&role=${form.getValues('role')}`,
                             queryParams: {
                                 access_type: 'offline',
                                 prompt: 'consent',
-                                role: form.getValues('role') // Pass selected role
                             },
                         },
                     })

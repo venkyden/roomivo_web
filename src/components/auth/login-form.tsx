@@ -106,7 +106,7 @@ export function LoginForm() {
                 supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: {
-                        redirectTo: `${location.origin}/auth/callback`,
+                        redirectTo: `${location.origin}/auth/callback?flow=login`,
                     },
                 })
             }}>
