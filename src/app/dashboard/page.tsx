@@ -17,9 +17,27 @@ export default async function DashboardPage() {
         .eq('id', user.id)
         .single()
 
-    // If profile doesn't exist yet (race condition), default to tenant
-    // or show a loading state / error. For now, default to tenant.
-    const role = profile?.role || 'tenant'
+    // Determine role with fallbacks
+    // 1. Profile role (SSOT)
+    // 2. Metadata role (Backup)
+    // 3. Default to tenant
+    let role = profile?.role
+
+    if (!role) {
+        // Fallback to metadata
+        const metadataRole = user.user_metadata?.role
+        if (metadataRole && ['landlord', 'tenant'].includes(metadataRole)) {
+            role = metadataRole
+
+            // Self-heal: Update profile with role from metadata if missing
+            await supabase
+                .from('profiles')
+                .update({ role: role })
+                .eq('id', user.id)
+        } else {
+            role = 'tenant'
+        }
+    }
 
     if (role === 'landlord') {
         return redirect('/landlord')

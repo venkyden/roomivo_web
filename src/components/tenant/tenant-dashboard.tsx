@@ -26,18 +26,29 @@ export function TenantDashboard() {
     const { payments, loading: paymentsLoading } = usePayments()
     const { incidents, loading: incidentsLoading } = useIncidents()
     const [user, setUser] = useState<any>(null)
+    const [isLoading, setIsLoading] = useState(true)
     const supabase = createClient()
 
     useEffect(() => {
         const getUser = async () => {
             const { data: { user } } = await supabase.auth.getUser()
             setUser(user)
+            setIsLoading(false)
+
+            // Redirect if landlord accidentally lands here
+            if (user?.user_metadata?.role === 'landlord') {
+                router.push('/landlord')
+            }
         }
         getUser()
-    }, [])
+    }, [router])
 
     const handlePropertySelect = (property: Property) => {
         router.push(`/properties/${property.id}`)
+    }
+
+    if (isLoading) {
+        return <div className="min-h-screen pt-24 flex justify-center"><p>Loading dashboard...</p></div>
     }
 
     return (
