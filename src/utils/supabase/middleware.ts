@@ -23,7 +23,7 @@ export const updateSession = async (request: NextRequest) => {
                             sameSite: 'lax' as const,
                             secure: process.env.NODE_ENV === 'production',
                             path: '/',
-                            httpOnly: true,
+                            httpOnly: false,
                         }
                         request.cookies.set(name, value)
                         supabaseResponse.cookies.set(name, value, enhancedOptions)

@@ -21,13 +21,14 @@ export async function GET(request: Request) {
                     setAll(cookiesToSet) {
                         try {
                             cookiesToSet.forEach(({ name, value, options }) => {
-                                // Enhanced cookie security
+                                // httpOnly must be false for Supabase client to work in browser
+                                // so it can read the token and send it in the Authorization header
                                 const enhancedOptions = {
                                     ...options,
                                     sameSite: 'lax' as const,
                                     secure: process.env.NODE_ENV === 'production',
                                     path: '/',
-                                    httpOnly: true,
+                                    httpOnly: false,
                                 }
                                 cookieStore.set(name, value, enhancedOptions)
                             })
