@@ -29,22 +29,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  // Fetch profile if user exists to pass complete data to Navbar
-  let userWithProfile = user;
-  if (user) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .single();
-    if (profile) {
-      userWithProfile = { ...user, profile };
-    }
-  }
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body
