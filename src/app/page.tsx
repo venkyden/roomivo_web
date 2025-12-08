@@ -6,17 +6,24 @@ import { ArrowRight, ShieldCheck, Clock, FileCheck } from 'lucide-react'
 import { createClient } from '@/utils/supabase/server'
 
 export default async function Home() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  let userWithProfile: any = null
 
-  let userWithProfile: any = user
-  if (user) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .single()
-    if (profile) userWithProfile = { ...user, profile }
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (user) {
+      userWithProfile = user
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+      if (profile) userWithProfile = { ...user, profile }
+    }
+  } catch (error) {
+    console.error("Error loading user for landing page:", error)
+    // Fallback: render page without user session
   }
 
   return (
