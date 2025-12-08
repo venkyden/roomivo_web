@@ -5,6 +5,8 @@ import { Plus, Home, MapPin, Euro } from "lucide-react"
 import { toast } from "sonner"
 import { useLandlordProperties } from "@/hooks/use-landlord-properties"
 import Image from "next/image"
+import { AddPropertyDialog } from "./add-property-dialog"
+
 export function PropertyManager() {
     const { properties, loading, addProperty } = useLandlordProperties()
     const [isAddOpen, setIsAddOpen] = useState(false)
