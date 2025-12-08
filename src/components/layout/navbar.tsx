@@ -32,31 +32,48 @@ export function Navbar() {
         }
         window.addEventListener('scroll', handleScroll)
 
-        // Check auth status
+        // Initial check
         const getUser = async () => {
             try {
-                const { data: { user } } = await supabase.auth.getUser()
+                const { data: { user }, error } = await supabase.auth.getUser()
                 if (user) {
-                    const { data: profile, error } = await supabase
+                    const { data: profile } = await supabase
                         .from('profiles')
                         .select('*')
                         .eq('id', user.id)
                         .single()
 
-                    if (!error && profile) {
-                        setUser({ ...user, profile })
-                    } else {
-                        setUser(user)
-                    }
+                    setUser({ ...user, profile })
+                } else {
+                    setUser(null)
                 }
             } catch (error) {
                 console.error("Error fetching user:", error)
+                setUser(null)
             }
         }
         getUser()
 
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
+        // Listen for auth changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+            if (session?.user) {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', session.user.id)
+                    .single()
+                setUser({ ...session.user, profile })
+            } else {
+                setUser(null)
+            }
+            router.refresh()
+        })
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+            subscription.unsubscribe()
+        }
+    }, [pathname]) // Re-run if pathname changes (just in case), though auth listener covers standard auth flows
 
     const handleSignOut = async () => {
         await supabase.auth.signOut()
