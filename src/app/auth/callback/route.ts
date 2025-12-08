@@ -68,19 +68,19 @@ export async function GET(request: Request) {
                     .eq('id', user.id)
             }
 
-            // Get final role (either from update above or existing)
-            // Refresh user data to get latest metadata
-            const { data: { user: refreshedUser } } = await supabase.auth.getUser()
-            const role = refreshedUser?.user_metadata?.role || 'tenant'
+            // Fetch role from profiles table to ensure accuracy
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('role')
+                .eq('id', user.id)
+                .single()
 
-            // Log for debugging
+            const role = profile?.role || user.user_metadata?.role || 'tenant'
+
             console.log('OAuth user:', user.id, 'Flow:', flow, 'Role:', role)
 
-            if (role === 'landlord') {
-                return NextResponse.redirect(`${origin}/landlord`)
-            } else {
-                return NextResponse.redirect(`${origin}/tenant`)
-            }
+            // Redirect to the central dashboard router which handles role-based sub-routing
+            return NextResponse.redirect(`${origin}/dashboard`)
         } else {
             console.error('OAuth error:', error)
         }
