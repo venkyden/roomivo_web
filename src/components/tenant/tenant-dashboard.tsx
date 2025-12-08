@@ -41,9 +41,9 @@ export function TenantDashboard() {
     }
 
     return (
-        <div className="container py-8">
+        <div className="container py-8 pt-24">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-                <TabsList className="grid w-full grid-cols-6 lg:w-[600px]">
+                <TabsList className="grid w-full grid-cols-7 lg:w-[700px]">
                     <TabsTrigger value="matches">Matches</TabsTrigger>
                     <TabsTrigger value="applications">Applications</TabsTrigger>
                     <TabsTrigger value="contracts">Contracts</TabsTrigger>
@@ -53,12 +53,7 @@ export function TenantDashboard() {
                     <TabsTrigger value="profile">Profile</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="matches" className="space-y-6 animate-in fade-in-50 duration-500">
-                    <div className="flex items-center justify-between">
-                        <h2 className="text-2xl font-bold tracking-tight">Recommended for You</h2>
-                    </div>
-                    <TenantMatches onSelectProperty={handlePropertySelect} />
-                </TabsContent>
+                {/* ... existing content ... */}
 
                 <TabsContent value="applications" className="animate-in fade-in-50 duration-500">
                     <div className="flex items-center justify-between">
@@ -72,7 +67,7 @@ export function TenantDashboard() {
                                 <TenantApplicationCard
                                     key={app.id}
                                     application={app}
-                                    onViewDetails={(id) => console.log("View details", id)}
+                                    onViewDetails={(id) => toast.info(`Viewing application ${id}`)}
                                 />
                             ))}
                             {!appsLoading && applications.length === 0 && (

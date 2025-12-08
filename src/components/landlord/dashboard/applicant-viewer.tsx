@@ -52,7 +52,12 @@ export function ApplicantViewer() {
                             </div>
 
                             <div className="flex items-center gap-2 mt-4 md:mt-0">
-                                <Button variant="outline" size="sm" className="text-muted-foreground">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="text-muted-foreground"
+                                    onClick={() => toast.info(`Viewing details for ${applicant.name}`)}
+                                >
                                     <FileText className="w-4 h-4 mr-2" />
                                     Details
                                 </Button>

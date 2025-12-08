@@ -62,10 +62,20 @@ export function PropertyManager() {
                                 </div>
                             </div>
                             <div className="flex gap-2 pt-2">
-                                <Button variant="outline" size="sm" className="h-7 text-xs flex-1">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="h-7 text-xs flex-1"
+                                    onClick={() => toast.info("Edit functionality coming soon")}
+                                >
                                     Edit
                                 </Button>
-                                <Button variant="secondary" size="sm" className="h-7 text-xs flex-1">
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    className="h-7 text-xs flex-1"
+                                    onClick={() => toast.success(`Viewing property: ${property.name}`)}
+                                >
                                     View
                                 </Button>
                             </div>
